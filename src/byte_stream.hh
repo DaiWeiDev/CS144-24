@@ -3,7 +3,7 @@
 #include <cstdint>
 #include <string>
 #include <string_view>
-
+#include <deque>
 class Reader;
 class Writer;
 
@@ -23,8 +23,16 @@ public:
 
 protected:
   // Please add any additional state to the ByteStream here, and not to the Writer and Reader interfaces.
-  uint64_t capacity_;
-  bool error_ {};
+  // use {} to initialize the member
+  std::deque<std::string> buffer_ {};
+  std::deque<std::string_view> buffer_view_ {};
+  uint64_t capacity_ { 0 };
+  uint64_t available_capacity_ { 0 };
+  uint64_t bytes_pushed_ { 0 };
+  uint64_t bytes_popped_ { 0 };
+  uint64_t bytes_buffered_ { 0 };
+  bool error_ { false };
+  bool is_closed_ { false };
 };
 
 class Writer : public ByteStream
