@@ -1,7 +1,9 @@
 #pragma once
 
 #include "byte_stream.hh"
-
+#include <cstdint>
+#include <map>
+#include <optional>
 class Reassembler
 {
 public:
@@ -42,4 +44,12 @@ public:
 
 private:
   ByteStream output_; // the Reassembler writes to this ByteStream
+  std::map<uint64_t, std::string> buf_ {};
+  uint64_t total_pending_ {};
+  // It provides a way to represent optional (nullable) values, which can be either present or absent. 
+  // This is particularly useful when dealing with functions or operations that may not always produce a valid result.
+  std::optional<uint64_t> end_index_ {};
+
+  // noexcept: This is a specifier indicating that the function does not throw any exceptions.
+  auto split (uint64_t pos) noexcept;
 };
